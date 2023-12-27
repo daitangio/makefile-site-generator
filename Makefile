@@ -2,6 +2,7 @@
 # https://itnext.io/glorious-makefile-building-your-static-website-4e7cdc32d985
 SRC_DIR = src
 DST_DIR = build
+TEMPLATE_DIR=template
 
 CSS_DIR = $(DST_DIR)/css
 SCSS_DIR = $(SRC_DIR)/scss
@@ -12,19 +13,25 @@ CSS_FILES=$(patsubst $(SCSS_DIR)/%.scss, $(CSS_DIR)/%.css, $(SCSS_FILES))
 
 MD_FILES = $(shell find $(SRC_DIR) -type f -name '*.md')
 HTML_FILES = $(patsubst $(SRC_DIR)/%.md, $(DST_DIR)/%.html, $(MD_FILES))
-TEMPLATE = $(SRC_DIR)/template.html
 
-BASE_URL = "https://c64.gioorgi.com"
+CAT_FILES = $(shell find $(SRC_DIR)/category/ -type f -name '*.md')
+CAT_INDEXES=$(patsubst $(SRC_DIR)/category/%.md, $(DST_DIR)/%.index, $(CAT_FILES) )
+
+CAT_REVERSE_INDEX=$(DST_DIR)/file2cat.index
+
+TEMPLATE = $(TEMPLATE_DIR)/main_template.html
+
+BASE_URL = "https://daitangio.github.io/makefile-site-generator"
 
 .PHONY: all
-all: html css $(DST_DIR)/robots.txt $(DST_DIR)/sitemap.xml ## Build the whole website
+all: html css $(DST_DIR)/robots.txt $(DST_DIR)/sitemap.xml  ## Build the whole website
 
 #
 # HTML
 #
 
 .PHONY: html
-html: $(HTML_FILES) ## Build all HTML files from SLIM files (even nested)
+html: $(HTML_FILES) $(CAT_INDEXES) ## Build all HTML files from SLIM files (even nested)
 
 # $(DST_DIR)/%.html: $(SRC_DIR)/%.md
 # 	pandoc --from markdown --to html --standalone $< -o $@
@@ -35,7 +42,28 @@ $(DST_DIR)/%.html: $(SRC_DIR)/%.md $(TEMPLATE)
 	--to html \
 	--template $(TEMPLATE) \
 	--variable today="$$(date)" \
+	--variable baseroot="${BASE_URL}" \
 	-o $@ $<
+	# Step 2 extract categories for it 
+	pandoc \
+	--from markdown_github+smart+yaml_metadata_block+auto_identifiers \
+	--to plain  \
+	--template $(TEMPLATE_DIR)/cat_collector.html \
+	-o $@.tmp.index $<
+	cat $@.tmp.index >>$(CAT_REVERSE_INDEX)
+	rm $@.tmp.index
+
+
+
+# We must collect all the pages referring on a category.
+# Because we must collect, every modifications must force the regen
+$(DST_DIR)/%.index: $(SRC_DIR)/category/%.md $(HTML_FILES)
+	echo Generating $@
+# pandoc \
+# --from markdown_github+smart+yaml_metadata_block+auto_identifiers \
+# --to html \
+# --template template/cat_collector.html \
+# -o $@ $<
 
 #
 # CSS
@@ -74,7 +102,7 @@ $(DST_DIR)/sitemap.xml: $(HTML_FILES)
 
 .PHONY: clean
 clean:
-	rm -f $(HTML_FILES)
+	rm -f $(HTML_FILES)  $(CAT_INDEXES) $(DST_DIR)/sitemap.xml $(DST_DIR)/robots.txt $(CAT_REVERSE_INDEX)
 	rm -rf $(CSS_DIR)
 	
 .PHONY: help
@@ -95,7 +123,8 @@ install: ## Install software needed
 
 # Deploy to gh-pages branch according to
 # https://sangsoonam.github.io/2019/02/08/using-git-worktree-to-deploy-github-pages.html
-deploy: ## Deploy gh-pages
+deploy: all ## Deploy gh-pages
+	echo Deploying
 	git worktree add public_html gh-pages
 	cp -rf build/* public_html
 	cd public_html && \
