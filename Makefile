@@ -88,8 +88,18 @@ serve: ## Serve the site on port 8000
 
 # entr: Run arbitrary commands when files change
 watch: ## Modify and rebuild
-	python3 -m http.server -d build &
 	find src  Makefile | entr make
 
 install: ## Install software needed
 	sudo apt install entr pandoc sass
+
+# Deploy to gh-pages branch according to
+# https://sangsoonam.github.io/2019/02/08/using-git-worktree-to-deploy-github-pages.html
+deploy: ## Deploy gh-pages
+	git worktree add public_html gh-pages
+	cp -rf build/* public_html
+	cd public_html && \
+	  git add --all && \
+	  git commit -m "Deploy to github pages" && \
+	  git push origin gh-pages
+	git worktree remove public_html
