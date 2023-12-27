@@ -1,0 +1,3 @@
+src/about.md: intro, about
+src/todo.md: todo
+src/index.md: intro, tech, software

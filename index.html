@@ -15,20 +15,32 @@
   </style>
 </head>
 <body>
-Main Page by Giovanni Giorgi, Author2<br/>
-Posted under <a href="/category/intro">intro</a>, <a href="/category/iech">iech</a>, <a href="/category/software">software</a>
+Main Page by Giovanni Giorgi<br/>
+Posted under <a href="https://daitangio.github.io/makefile-site-generator/category/intro">intro</a>, <a href="https://daitangio.github.io/makefile-site-generator/category/tech">tech</a>, <a href="https://daitangio.github.io/makefile-site-generator/category/software">software</a>
 <h2 id="main-web-site">Main web site</h2>
 <p>This web site is a demo site for my own makefile site generator, called makefile-site-generator. The project is a makefile for generating a nice static site: blazing fast, minimum dependencies. It is based on the following articles:</p>
 <ul>
 <li><a href="https://itnext.io/glorious-makefile-building-your-static-website-4e7cdc32d985" class="uri">https://itnext.io/glorious-makefile-building-your-static-website-4e7cdc32d985</a></li>
 <li><a href="https://www.karl.berlin/static-site.html" class="uri">https://www.karl.berlin/static-site.html</a></li>
+<li><a href="https://github.com/patrickbr/hagel/" class="uri">https://github.com/patrickbr/hagel/</a></li>
 </ul>
-<p>The template engine is based on <a href="https://pandoc.org/MANUAL.html#templates">pandoc templates</a> so you can employ metadata and so on</p>
+<p>The template engine is based on <a href="https://pandoc.org/MANUAL.html#templates">pandoc templates</a> so you can employ metadata and so on.</p>
 <h2 id="basic-usage">Basic usage</h2>
-<p>On every page you can add a set of metdata like a list of authors and categories (see index.md for an example).</p>
+<p>On every page you can add a set of metadata like a list of authors and categories like the following:</p>
+<pre><code>---
+title: Main Page
+authors:
+  - Giovanni Giorgi
+categories:
+  - intro
+  - tech
+  - software
+---</code></pre>
+<h2 id="how-categories-works">How categories works</h2>
+<p>For every category, you must define a file inside category/ to describe it. The categroy page must have the following structure</p>
 
 <!-- Footer -->
 <br />
-Generated on Wed 27 Dec 2023 05:29:19 PM CET
+Generated on Wed 27 Dec 2023 06:38:51 PM CET
 </body>
 </html>
