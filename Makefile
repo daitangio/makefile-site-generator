@@ -122,8 +122,8 @@ serve: ## Serve the site on port 8000
 	python3 -m http.server -d build
 
 # entr: Run arbitrary commands when files change
-watch: ## Modify and rebuild
-	find src  Makefile | entr make
+watch: ## Modify and rebuild locally
+	find src  Makefile | entr make BASE_URL="http://localhost:8000/" 
 
 install: ## Install software needed
 	sudo apt install entr pandoc

@@ -8,7 +8,7 @@ categories:
   - software
 ---
 ## Main web site
-This web site is a demo site for my own makefile site generator, called makefile-site-generator.
+This web site is a demo site for my own makefile site generator, called (after a long thinking) makefile-site-generator.
 The project is a makefile for generating a nice static site: blazing fast, minimum dependencies.
 It is based on the following articles:
 
@@ -16,7 +16,9 @@ It is based on the following articles:
 - https://www.karl.berlin/static-site.html
 - https://github.com/patrickbr/hagel/
 
-The template engine is based on [pandoc templates](https://pandoc.org/MANUAL.html#templates) so you can employ metadata and so on.
+A good read of the [make manual](/make.html) taken from official https://www.gnu.org/software/make/manual/ is important too.
+
+The template engine is based on [pandoc templates](https://pandoc.org/MANUAL.html#templates) so you can employ yaml metadata on every markdown file.
 
 ## Basic usage
 
