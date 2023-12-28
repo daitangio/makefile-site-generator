@@ -3,8 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <base href="http://localhost:8000/" />
   <title>Main Page</title>
+  <!-- Core theme CSS (includes Bootstrap)-->
+  <link href="css/styles.css" rel="stylesheet" />
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -15,16 +18,43 @@
   </style>
 </head>
 <body>
+
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+          <div class="container px-4 px-lg-5">
+              <a class="navbar-brand" href="/">MakefileGenerator</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                  Menu
+                  <i class="fas fa-bars"></i>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                  <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                      <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="index.html">Home</a></li>
+                      <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="about.html">About</a></li>
+                      <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="post.html">Sample Post</a></li>
+                      <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="contact.html">Contact</a></li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
+
+        <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+
+
 Main Page by Giovanni Giorgi<br/>
-Posted under <a href="https://daitangio.github.io/makefile-site-generator/category/intro">intro</a>, <a href="https://daitangio.github.io/makefile-site-generator/category/tech">tech</a>, <a href="https://daitangio.github.io/makefile-site-generator/category/software">software</a>
+Posted under <a href="http://localhost:8000//category/intro">intro</a>, <a href="http://localhost:8000//category/tech">tech</a>, <a href="http://localhost:8000//category/software">software</a>
 <h2 id="main-web-site">Main web site</h2>
-<p>This web site is a demo site for my own makefile site generator, called makefile-site-generator. The project is a makefile for generating a nice static site: blazing fast, minimum dependencies. It is based on the following articles:</p>
+<p>This web site is a demo site for my own makefile site generator, called (after a long thinking) makefile-site-generator. The project is a makefile for generating a nice static site: blazing fast, minimum dependencies. It is based on the following articles:</p>
 <ul>
 <li><a href="https://itnext.io/glorious-makefile-building-your-static-website-4e7cdc32d985" class="uri">https://itnext.io/glorious-makefile-building-your-static-website-4e7cdc32d985</a></li>
 <li><a href="https://www.karl.berlin/static-site.html" class="uri">https://www.karl.berlin/static-site.html</a></li>
 <li><a href="https://github.com/patrickbr/hagel/" class="uri">https://github.com/patrickbr/hagel/</a></li>
 </ul>
-<p>The template engine is based on <a href="https://pandoc.org/MANUAL.html#templates">pandoc templates</a> so you can employ metadata and so on.</p>
+<p>A good read of the <a href="/make.html">make manual</a> taken from official <a href="https://www.gnu.org/software/make/manual/" class="uri">https://www.gnu.org/software/make/manual/</a> is important too.</p>
+<p>The template engine is based on <a href="https://pandoc.org/MANUAL.html#templates">pandoc templates</a> so you can employ yaml metadata on every markdown file.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <p>On every page you can add a set of metadata like a list of authors and categories like the following:</p>
 <pre><code>---
@@ -39,8 +69,13 @@ categories:
 <h2 id="how-categories-works">How categories works</h2>
 <p>For every category, you must define a file inside category/ to describe it. The categroy page must have the following structure</p>
 
+                </div></div></div>
 <!-- Footer -->
 <br />
-Generated on Wed 27 Dec 2023 06:38:51 PM CET
+Generated on Thu 28 Dec 2023 04:46:35 PM CET
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
 </body>
 </html>
