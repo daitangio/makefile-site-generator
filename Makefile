@@ -6,7 +6,7 @@ TEMPLATE_DIR=template
 BASE_URL="https://daitangio.github.io/makefile-site-generator"
 
 TEMPLATE = $(TEMPLATE_DIR)/main_template.html
-
+TEMPLATE_FILES=$(wildcard $(TEMPLATE_DIR)/*)
 
 CSS_DIR = $(DST_DIR)/css
 SCSS_DIR = $(SRC_DIR)/scss
@@ -40,13 +40,14 @@ html: $(HTML_FILES) ## Build all HTML files from SLIM files (even nested)
 # $(DST_DIR)/%.html: $(SRC_DIR)/%.md
 # 	pandoc --from markdown --to html --standalone $< -o $@
 
-$(DST_DIR)/%.html: $(SRC_DIR)/%.md $(TEMPLATE)
+$(DST_DIR)/%.html: $(SRC_DIR)/%.md $(TEMPLATE_FILES)
 	@pandoc \
 	--from markdown_github+smart+yaml_metadata_block+auto_identifiers \
 	--to html \
 	--template $(TEMPLATE) \
 	--variable today="$$(date)" \
 	--variable baseroot="${BASE_URL}" \
+	--toc --toc-depth=2 \
 	-o $@ $<
 
 #
@@ -97,6 +98,7 @@ $(DST_DIR)/sitemap.xml: $(HTML_FILES)
 	for f in $^; do echo "<url><loc>$(BASE_URL)$${f#$(DST_DIR)}<loc></url>" >> $@ ; done
 	@echo '</urlset>' >> $@
 
+
 #
 # Helpers
 #
@@ -123,7 +125,7 @@ serve: ## Serve the site on port 8000
 
 # entr: Run arbitrary commands when files change
 watch: ## Modify and rebuild locally
-	find src  Makefile | entr make BASE_URL="http://localhost:8000/" 
+	find src  Makefile template | entr make BASE_URL="http://localhost:8000/" 
 
 install: ## Install software needed
 	sudo apt install entr pandoc
