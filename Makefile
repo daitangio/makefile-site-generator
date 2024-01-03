@@ -3,26 +3,25 @@
 SRC_DIR = src
 DST_DIR = build
 TEMPLATE_DIR=template
-BASE_URL="https://daitangio.github.io/makefile-site-generator"
+BASE_URL="http://localhost:8000/"
+TAILWIND=./tailwindcss
 
 TEMPLATE = $(TEMPLATE_DIR)/main_template.html
 TEMPLATE_FILES=$(wildcard $(TEMPLATE_DIR)/*)
 
 CSS_DIR = $(DST_DIR)/css
-SCSS_DIR = $(SRC_DIR)/scss
-SCSS_INCLUDES_DIR = $(SCSS_DIR)/includes
 
-SCSS_FILES = $(wildcard $(SCSS_DIR)/*.scss)
-CSS_FILES=$(patsubst $(SCSS_DIR)/%.scss, $(CSS_DIR)/%.css, $(SCSS_FILES))
+CSS_FILES=$(wildcard $(TEMPLATE_DIR)/input.css)
+
 
 JS_DIR=$(DST_DIR)/js
-SRC_STATIC_FILES=$(wildcard $(SRC_DIR)/*.html) $(wildcard $(SRC_DIR)/css/*.css)  $(wildcard $(SRC_DIR)/js/*.js)
+SRC_STATIC_FILES=$(wildcard $(SRC_DIR)/*.html)  $(wildcard $(SRC_DIR)/js/*.js)
 STATIC_FILES=$(subst $(SRC_DIR), $(DST_DIR), $(SRC_STATIC_FILES))
 
 MD_FILES = $(shell find $(SRC_DIR) -type f -name '*.md')
 HTML_FILES = $(patsubst $(SRC_DIR)/%.md, $(DST_DIR)/%.html, $(MD_FILES))
 
-ALL_GENERATED_CONTENT=$(HTML_FILES) $(STATIC_FILES) $(DST_DIR)/sitemap.xml $(DST_DIR)/robots.txt
+ALL_GENERATED_CONTENT=$(HTML_FILES) $(STATIC_FILES) $(DST_DIR)/sitemap.xml $(DST_DIR)/robots.txt $(DST_DIR)/css/tailwind.css
 
 
 .PHONY: all
@@ -76,8 +75,7 @@ static: $(STATIC_FILES)
 $(DST_DIR)/%.html: $(SRC_DIR)/%.html
 	cp $< $@
 
-$(DST_DIR)/css/%.css: $(SRC_DIR)/css/%.css  | $(CSS_DIR)
-	cp $< $@
+
 $(DST_DIR)/js/%.js: $(SRC_DIR)/js/%.js  | $(JS_DIR)
 	cp $< $@
 #
@@ -90,14 +88,16 @@ $(DST_DIR)/robots.txt:
 	@echo "Sitemap: $(BASE_URL)/sitemap.xml" >> $@
 
 #
-# Sitemap.xml
+# Sitemap.xml and tailwind css (FIXME)
 #
 
-$(DST_DIR)/sitemap.xml: $(HTML_FILES)
+# TODO: divide tailwind from sitemap generation
+
+$(DST_DIR)/sitemap.xml: $(HTML_FILES) | $(CSS_DIR)
 	@echo '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' > $@
 	for f in $^; do echo "<url><loc>$(BASE_URL)$${f#$(DST_DIR)}<loc></url>" >> $@ ; done
 	@echo '</urlset>' >> $@
-
+	$(TAILWIND) -i $(TEMPLATE_DIR)/input.css -o $(DST_DIR)/css/tailwind.css
 
 #
 # Helpers
@@ -129,12 +129,15 @@ watch: ## Modify and rebuild locally
 
 install: ## Install software needed
 	sudo apt install entr pandoc
-	npm install -g sass
+	# curl -L -o ./tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.0/tailwindcss-linux-x64
 
+.PHONY: deploy
 # Deploy to gh-pages branch according to
 # https://sangsoonam.github.io/2019/02/08/using-git-worktree-to-deploy-github-pages.html
-deploy: all ## Deploy gh-pages
+deploy:  ## Deploy gh-pages
 	echo Deploying
+	$(MAKE) clean
+	$(MAKE) BASE_URL="https://daitangio.github.io/makefile-site-generator" -j 2 all
 	git worktree add public_html gh-pages
 	cp -rf build/* public_html
 	cd public_html && \
