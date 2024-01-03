@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>http://localhost:8000//about.html<loc></url>
-<url><loc>http://localhost:8000//category/about.html<loc></url>
-<url><loc>http://localhost:8000//category/intro.html<loc></url>
-<url><loc>http://localhost:8000//category/todo.html<loc></url>
-<url><loc>http://localhost:8000//todo.html<loc></url>
-<url><loc>http://localhost:8000//index.html<loc></url>
+<url><loc>https://daitangio.github.io/makefile-site-generator/about.html<loc></url>
+<url><loc>https://daitangio.github.io/makefile-site-generator/category/about.html<loc></url>
+<url><loc>https://daitangio.github.io/makefile-site-generator/category/intro.html<loc></url>
+<url><loc>https://daitangio.github.io/makefile-site-generator/category/todo.html<loc></url>
+<url><loc>https://daitangio.github.io/makefile-site-generator/todo.html<loc></url>
+<url><loc>https://daitangio.github.io/makefile-site-generator/index.html<loc></url>
 </urlset>
