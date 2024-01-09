@@ -25,8 +25,7 @@ ALL_GENERATED_CONTENT=$(HTML_FILES) $(STATIC_FILES) $(DST_DIR)/sitemap.xml $(DST
 
 
 .PHONY: all
-all: html css static $(DST_DIR)/robots.txt $(DST_DIR)/sitemap.xml  ## Build the whole website
-
+all: html css static   ## Build the whole website
 
 
 #
@@ -34,20 +33,21 @@ all: html css static $(DST_DIR)/robots.txt $(DST_DIR)/sitemap.xml  ## Build the 
 #
 
 .PHONY: html
-html: $(HTML_FILES) ## Build all HTML files from SLIM files (even nested)
+html: $(HTML_FILES) $(DST_DIR)/robots.txt $(DST_DIR)/sitemap.xml ## Build all HTML files from SLIM files (even nested)
 
 # $(DST_DIR)/%.html: $(SRC_DIR)/%.md
 # 	pandoc --from markdown --to html --standalone $< -o $@
 
 $(DST_DIR)/%.html: $(SRC_DIR)/%.md $(TEMPLATE_FILES)
+	@echo Building $@	
 	@pandoc \
-	--from markdown_github+smart+yaml_metadata_block+auto_identifiers \
+	--from gfm+yaml_metadata_block \
 	--to html \
 	--template $(TEMPLATE) \
 	--variable today="$$(date)" \
 	--variable baseroot="${BASE_URL}" \
 	--toc --toc-depth=2 \
-	-o $@ $<
+	--standalone -o $@ $<
 
 #
 # CSS
@@ -97,6 +97,10 @@ $(DST_DIR)/sitemap.xml: $(HTML_FILES) | $(CSS_DIR)
 	@echo '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' > $@
 	for f in $^; do echo "<url><loc>$(BASE_URL)$${f#$(DST_DIR)}<loc></url>" >> $@ ; done
 	@echo '</urlset>' >> $@
+	
+
+
+$(DST_DIR)/css/tailwind.css: $(HTML_FILES) | $(CSS_DIR)
 	$(TAILWIND) -i $(TEMPLATE_DIR)/input.css -o $(DST_DIR)/css/tailwind.css
 
 #
@@ -105,10 +109,10 @@ $(DST_DIR)/sitemap.xml: $(HTML_FILES) | $(CSS_DIR)
 
 
 .PHONY: clean
-clean: $(ALL_GENERATED_CONTENT)  ## Delete eveything
-	rm  $^
-	# List of auto-managed directories
-	rmdir $(DST_DIR)/css $(DST_DIR)/js
+clean:  ## Delete eveything
+	rm  -f $(ALL_GENERATED_CONTENT)
+	# test -d $(DST_DIR)/css && rmdir $(DST_DIR)/css 
+	# test -d $(DST_DIR)/js  && rmdir $(DST_DIR)/js
 
 
 .PHONY: help
@@ -145,3 +149,5 @@ deploy:  ## Deploy gh-pages
 	  git commit -m "Deploy to github pages" && \
 	  git push origin gh-pages
 	git worktree remove public_html
+
+
